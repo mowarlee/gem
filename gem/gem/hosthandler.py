@@ -1,23 +1,9 @@
-#####################################################################
-# hosthandler.py
-#
-# (c) Copyright 2013-2015, Benjamin Parzella. All rights reserved.
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-#
-# This software is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#####################################################################
-"""Handler for GEM host."""
-
 from ..secs.dataitems import ALED, ACKC5, ACKC10
 from .handler import GemHandler
 from collections import OrderedDict
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from gem.secs.functionbase import SecsStreamFunction
 
 
 class GemHostHandler(GemHandler):
@@ -195,7 +181,7 @@ class GemHostHandler(GemHandler):
         del handler, ALID, ALCD, ALTX  # unused variables
         return ACKC5.ACCEPTED
 
-    def _on_s05f01(self, handler, packet):
+    def _on_s05f01(self, handler : GemHandler, packet : 'SecsStreamFunction'):
         """
         Callback handler for Stream 5, Function 1, Alarm request.
 
@@ -213,7 +199,7 @@ class GemHostHandler(GemHandler):
 
         return self.stream_function(5, 2)(result)
 
-    def _on_s06f11(self, handler, packet):
+    def _on_s06f11(self, handler : GemHandler, packet : 'SecsStreamFunction'):
         """
         Callback handler for Stream 6, Function 11, Establish Communication Request.
 
@@ -241,11 +227,11 @@ class GemHostHandler(GemHandler):
 
         return self.stream_function(6, 12)(0)
 
-    def _on_terminal_received(self, handler, TID, TEXT):
+    def _on_terminal_received(self, handler : GemHandler, TID, TEXT):
         del handler, TID, TEXT  # unused variables
         return ACKC10.ACCEPTED
 
-    def _on_s10f01(self, handler, packet):
+    def _on_s10f01(self, handler : GemHandler, packet : 'SecsStreamFunction'):
         """
         Callback handler for Stream 10, Function 1, Terminal Request.
 

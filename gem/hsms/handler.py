@@ -19,6 +19,8 @@ import random
 import threading
 import logging
 import queue
+import threading
+from typing import TYPE_CHECKING
 
 from ..common.callbacks import CallbackHandler
 from ..common.events import EventProducer
@@ -29,6 +31,9 @@ from .packets import HsmsPacket, HsmsRejectReqHeader, HsmsStreamFunctionHeader,\
     HsmsDeselectReqHeader, HsmsDeselectRspHeader, HsmsSeparateReqHeader
 
 from .connectionstatemachine import ConnectionStateMachine
+
+if TYPE_CHECKING:
+    from ..secs.functionbase import SecsStreamFunction
 
 
 class HsmsHandler:
@@ -293,7 +298,7 @@ class HsmsHandler:
 
             # what to do if no sender for request waiting?
 
-    def on_connection_packet_received(self, _, packet):
+    def on_connection_packet_received(self, _, packet : 'HsmsPacket'):
         """
         Packet received by connection.
 

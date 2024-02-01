@@ -17,10 +17,15 @@
 
 import logging
 import threading
+from typing import TYPE_CHECKING
 import copy
 
 from ..hsms.handler import HsmsHandler
 from . import functions
+
+if TYPE_CHECKING:
+    from ..hsms import HsmsPacket
+    from ..secs.functionbase import SecsStreamFunction
 
 
 class SecsHandler(HsmsHandler):
@@ -433,7 +438,7 @@ class SecsHandler(HsmsHandler):
 
         return self.secsStreamsFunctions[stream][function]
 
-    def secs_decode(self, packet):
+    def secs_decode(self, packet : 'HsmsPacket') -> 'SecsStreamFunction' | None:
         """
         Get object of decoded stream and function class, or None if no class is available.
 

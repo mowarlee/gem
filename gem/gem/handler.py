@@ -1,25 +1,17 @@
-#####################################################################
-# handler.py
-#
-# (c) Copyright 2013-2015, Benjamin Parzella. All rights reserved.
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-#
-# This software is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#####################################################################
 """Handler for GEM commands. Used in combination with :class:`secsgem.HsmsHandler.HsmsConnectionManager`."""
 
+from __future__ import annotations
 import logging
 import threading
+from typing import TYPE_CHECKING
 
 from ..common.fysom import Fysom
 from ..secs.handler import SecsHandler
+
+if TYPE_CHECKING:
+    from ..secs.functionbase import SecsStreamFunction
+    from ..hsms.packets import HsmsPacket
+    from ..
 
 
 class GemHandler(SecsHandler):
@@ -241,7 +233,7 @@ class GemHandler(SecsHandler):
             # update communication state
             self.communicationState.communicationfail()
 
-    def on_commack_requested(self):
+    def on_commack_requested(self) -> int:
         """
         Get the acknowledgement code for the connection request.
 
@@ -267,7 +259,7 @@ class GemHandler(SecsHandler):
         return self.secs_decode(self.send_and_waitfor_response(self.stream_function(7, 3)(
             {"PPID": ppid, "PPBODY": ppbody}))).get()
 
-    def request_process_program(self, ppid):
+    def request_process_program(self, ppid : str):
         """
         Request a process program.
 
@@ -280,7 +272,7 @@ class GemHandler(SecsHandler):
         s7f6 = self.secs_decode(self.send_and_waitfor_response(self.stream_function(7, 5)(ppid)))
         return s7f6.PPID.get(), s7f6.PPBODY.get()
 
-    def waitfor_communicating(self, timeout=None):
+    def waitfor_communicating(self, timeout : float | None=None):
         """
         Wait until connection gets into communicating state. Returns immediately if state is communicating.
 
@@ -302,7 +294,7 @@ class GemHandler(SecsHandler):
 
         return result
 
-    def _on_s01f01(self, handler, packet):
+    def _on_s01f01(self, handler : GemHandler, packet : 'HsmsPacket'):
         """
         Callback handler for Stream 1, Function 1, Are You There.
 
@@ -318,7 +310,7 @@ class GemHandler(SecsHandler):
 
         return self.stream_function(1, 2)([self.MDLN, self.SOFTREV])
 
-    def _on_s01f13(self, handler, packet):
+    def _on_s01f13(self, handler : GemHandler, packet : 'HsmsPacket'):
         """
         Callback handler for Stream 1, Function 13, Establish Communication Request.
 
