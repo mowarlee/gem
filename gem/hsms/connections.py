@@ -578,7 +578,7 @@ class HsmsMultiPassiveServer:  # pragma: no cover
         self.threadRunning = False
         self.stopThread = False
 
-        self.connections = {}
+        self.connections : dict[str, HsmsConnection] = {}
 
         self.listenThread = None
 

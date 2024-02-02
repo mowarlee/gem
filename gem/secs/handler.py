@@ -438,7 +438,7 @@ class SecsHandler(HsmsHandler):
 
         return self.secsStreamsFunctions[stream][function]
 
-    def secs_decode(self, packet : 'HsmsPacket') -> 'SecsStreamFunction' | None:
+    def secs_decode(self, packet : 'HsmsPacket') -> 'SecsStreamFunction':
         """
         Get object of decoded stream and function class, or None if no class is available.
 

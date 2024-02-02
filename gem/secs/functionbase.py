@@ -113,7 +113,7 @@ class SecsStreamFunction(metaclass=StructureDisplayingMeta):
             " W" if self._isReplyRequired else "",
             indent_block(data))
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> SecsVar:
         """Get an item using the indexer operator."""
         return self.data[key]
 
@@ -121,11 +121,11 @@ class SecsStreamFunction(metaclass=StructureDisplayingMeta):
         """Set an item using the indexer operator."""
         self.data[key] = item
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Get the lenth."""
         return len(self.data)
 
-    def __getattr__(self, item):
+    def __getattr__(self, item) -> SecsVar:
         """Get an item as object member."""
         return self.data.__getattr__(item)
 

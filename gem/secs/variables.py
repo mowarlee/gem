@@ -14,7 +14,7 @@
 # GNU Lesser General Public License for more details.
 #####################################################################
 """SECS variable types."""
-
+from __future__ import annotations
 from builtins import chr  # noqa
 
 import struct
@@ -42,7 +42,7 @@ class SecsVar:
         self.value = None
 
     @staticmethod
-    def generate(dataformat):
+    def generate(dataformat) -> SecsVar | None:
         """
         Generate actual variable from data format.
 

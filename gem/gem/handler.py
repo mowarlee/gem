@@ -11,7 +11,6 @@ from ..secs.handler import SecsHandler
 if TYPE_CHECKING:
     from ..secs.functionbase import SecsStreamFunction
     from ..hsms.packets import HsmsPacket
-    from ..
 
 
 class GemHandler(SecsHandler):
