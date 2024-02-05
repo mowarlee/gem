@@ -2857,6 +2857,101 @@ class SecsS06F12(SecsStreamFunction):
     _isMultiBlock = False
 
 
+class SecsS06F13(SecsStreamFunction):
+    """
+    Annotated Event Report Send
+
+    **Data Items**
+
+    - :class:`DATAID <secsgem.secs.dataitems.DATAID>`
+    - :class:`CEID <secsgem.secs.dataitems.CEID>`
+    - :class:`RPTID <secsgem.secs.dataitems.RPTID>`
+    - :class:`V <secsgem.secs.dataitems.V>`
+
+    **Structure**::
+
+        >>> import secsgem
+        >>> secsgem.SecsS06F13
+        {L:3
+            DATAID
+            CEID
+                {L:a
+                    {L:2
+                        RPTID
+                            {L:b
+                                {L:2
+                                VID
+                                V
+                        }
+                    }
+                }
+            }
+        }
+
+    """
+
+    _stream = 6
+    _function = 13
+
+    _dataFormat = [
+        DATAID,
+        CEID,
+        [
+            [
+                "RPT",   # name of the list
+                RPTID,
+                [V]
+            ]
+        ]
+    ]
+
+    _toHost = True
+    _toEquipment = False
+
+    _hasReply = True
+    _isReplyRequired = True
+
+    _isMultiBlock = True
+
+
+class SecsS06F14(SecsStreamFunction):
+    """
+    Annotated Event Report Ack
+
+    **Data Items**
+
+    - :class:`ACKC6 <secsgem.secs.dataitems.ACKC6>`
+
+    **Structure**::
+
+        >>> import secsgem
+        >>> secsgem.SecsS06F14
+        ACKC6: B[1]
+
+    **Example**::
+
+        >>> import secsgem
+        >>> secsgem.SecsS06F12(secsgem.ACKC6.ACCEPTED)
+        S6F14
+          <B 0x0> .
+
+    :param value: parameters for this function (see example)
+    :type value: byte
+    """
+
+    _stream = 6
+    _function = 14
+
+    _dataFormat = ACKC6
+
+    _toHost = False
+    _toEquipment = True
+
+    _hasReply = False
+    _isReplyRequired = False
+
+    _isMultiBlock = False
+
 class SecsS06F15(SecsStreamFunction):
     """
     event report request.
@@ -5948,6 +6043,8 @@ secsStreamsFunctions = {
         8: SecsS06F08,
         11: SecsS06F11,
         12: SecsS06F12,
+        13: SecsS06F13,
+        14: SecsS06F14,
         15: SecsS06F15,
         16: SecsS06F16,
         19: SecsS06F19,
