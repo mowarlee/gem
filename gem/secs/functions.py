@@ -703,6 +703,70 @@ class SecsS01F22(SecsStreamFunction):
     _isMultiBlock = False
 
 
+class SecsS01F23(SecsStreamFunction):
+    """
+        Collection Event Namelist Request
+    
+    Comment: Host sends L:0 to imply all CEIDs. (proposed ballot item 4824B, Oct 2011)
+    Format:
+
+
+    {L:n
+        CEID
+    }
+    """
+
+    _stream = 1
+    _function = 23
+
+    _dataFormat = [  ]
+
+    _toHost = True
+    _toEquipment = False
+
+    _hasReply = False
+    _isReplyRequired = True
+
+    _isMultiBlock = False
+
+class SecsS01F24(SecsStreamFunction):
+    """
+    Collection Event Namelist Reply
+
+    Comment: Only associated DVVAL VIDs are listed. A:0 for CENAME and L:0 for L:a indicates non-existent CEID. (proposed ballot item 4824B, Oct 2011)
+        Format:
+
+
+        {L:n
+            {L:3
+                CEID
+                CENAME
+                {L:a
+                    VID
+                }
+            }
+        }
+    """
+
+    _stream = 1
+    _function = 24
+
+    _dataFormat = [
+        [
+            DATAID,
+            DVNAME_NULLABLE,
+            UNITS,
+        ]
+    ]
+
+    _toHost = False
+    _toEquipment = True
+
+    _hasReply = False
+    _isReplyRequired = False
+
+    _isMultiBlock = False
+
 class SecsS02F00(SecsStreamFunction):
     """
     abort transaction stream 2.
@@ -6058,6 +6122,8 @@ secsStreamsFunctions = {
         18: SecsS01F18,
         21: SecsS01F21,
         22: SecsS01F22,
+        23: SecsS01F23,
+        24: SecsS01F24,
     },
     2: {
         0: SecsS02F00,
