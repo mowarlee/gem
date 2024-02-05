@@ -832,10 +832,13 @@ class SecsVarArray(SecsVar):
         # list
         self.data = []
 
-        for _ in range(length):
-            new_object = SecsVar.generate(self.item_decriptor)
-            text_pos = new_object.decode(data, text_pos)
-            self.data.append(new_object)
+        for i in range(length):
+            try:
+                new_object = SecsVar.generate(self.item_decriptor)
+                text_pos = new_object.decode(data, text_pos)
+                self.data.append(new_object)
+            except ValueError as ve:
+                raise ValueError(f"{i=} = > {ve}") from ve               
 
         return text_pos
 

@@ -18,7 +18,8 @@
 
 from .variables import SecsVarArray, SecsVarString, SecsVarBinary, \
     SecsVarI1, SecsVarI2, SecsVarI4, SecsVarI8, SecsVarF4, SecsVarF8, SecsVarU1, \
-    SecsVarU2, SecsVarU4, SecsVarU8, SecsVarBoolean, SecsVarDynamic
+    SecsVarU2, SecsVarU4, SecsVarU8, SecsVarBoolean, SecsVarDynamic ,\
+    SecsVarNumber
 
 
 # DataItemMeta adds __type__ member as base class
@@ -1016,6 +1017,10 @@ class DVNAME(DataItemBase):
                         SecsVarString]
 
 
+class DVNAME_NULLABLE(DVNAME):
+    __type__ = SecsVarDynamic
+    __allowedtypes__ = DVNAME.__allowedtypes__ + [SecsVarNumber]
+
 class DVVAL(DataItemBase):
     """
     Data value.
@@ -1046,7 +1051,6 @@ class DVVAL(DataItemBase):
     __type__ = SecsVarDynamic
     __allowedtypes__ = [SecsVarArray, SecsVarBoolean, SecsVarU1, SecsVarU2, SecsVarU4, SecsVarU8, SecsVarI1, SecsVarI2,
                         SecsVarI4, SecsVarI8, SecsVarF4, SecsVarF8, SecsVarString, SecsVarBinary]
-
 
 class EAC(DataItemBase):
     """
