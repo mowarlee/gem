@@ -45,7 +45,7 @@ class GemHostHandler(GemHandler):
         # delete all reports
         self.disable_ceid_reports()
 
-    def subscribe_collection_event(self, ceid, dvs, report_id=None):
+    def subscribe_collection_event(self, ceid : int, dvs : list[int], report_id : int | None=None):
         """
         Subscribe to a collection event.
 

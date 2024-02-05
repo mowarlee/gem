@@ -640,6 +640,64 @@ class SecsS01F18(SecsStreamFunction):
 
     _isMultiBlock = False
 
+class SecsS01F21(SecsStreamFunction):
+    """
+    Data Variable Namelist Request
+
+    Comment: Host sends L:0 to request all DVVALs. VIDs are limited to DVVAL variables only. (proposed ballot item 4824B, Oct 2011)
+        Format:
+
+
+        {L:n
+            VID
+        }
+    """
+
+    _stream = 1
+    _function = 21
+
+    _dataFormat = [  ]
+
+    _toHost = True
+    _toEquipment = False
+
+    _hasReply = False
+    _isReplyRequired = True
+
+    _isMultiBlock = False
+
+class SecsS01F22(SecsStreamFunction):
+    """
+    Data Variable Namelist Reply
+
+    Comment: A:0 for DVVALNAME and UNITS indicates unknown VID or that VID is not a DVVAL. (proposed ballot item 4824B, Oct 2011)
+    Format:
+
+
+    {L:n
+    {L:3
+    VID
+    DVVALNAME
+    UNITS
+    }
+    }
+    """
+
+    _stream = 1
+    _function = 21
+
+    _dataFormat = [
+        DATAID
+    ]
+
+    _toHost = False
+    _toEquipment = True
+
+    _hasReply = False
+    _isReplyRequired = False
+
+    _isMultiBlock = False
+
 
 class SecsS02F00(SecsStreamFunction):
     """
@@ -5994,6 +6052,8 @@ secsStreamsFunctions = {
         16: SecsS01F16,
         17: SecsS01F17,
         18: SecsS01F18,
+        21: SecsS01F21,
+        22: SecsS01F22,
     },
     2: {
         0: SecsS02F00,
