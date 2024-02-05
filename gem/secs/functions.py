@@ -675,19 +675,23 @@ class SecsS01F22(SecsStreamFunction):
 
 
     {L:n
-    {L:3
-    VID
-    DVVALNAME
-    UNITS
-    }
+        {L:3
+            VID
+            DVVALNAME
+            UNITS
+        }
     }
     """
 
     _stream = 1
-    _function = 21
+    _function = 22
 
     _dataFormat = [
-        DATAID
+        [
+            DATAID,
+            DVNAME,
+            []
+        ]
     ]
 
     _toHost = False
