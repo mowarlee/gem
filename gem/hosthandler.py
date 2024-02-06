@@ -233,7 +233,7 @@ class GemHostHandler(GemHandler):
                         "name": self.get_ceid_name(message.CEID), "handler": self.connection, 'peer': self}
                 self.events.fire("collection_event_received", data)
             except KeyError as ke:
-                self.logger.warning(f"{report.RPTID.get()} {list(self.reportSubscriptions.keys())}"})
+                self.logger.warning(f"{report.RPTID.get()} {list(self.reportSubscriptions.keys())} === > {ke}")
 
     def _on_terminal_received(self, handler : GemHandler, TID, TEXT):
         del handler, TID, TEXT  # unused variables
