@@ -26,6 +26,13 @@ class StructureDisplayingMeta(type):
         """Generate textual representation for an object of this class."""
         return cls.get_format()
 
+    def get_title(self) -> str:
+        import inspect
+        if tt := inspect.getdoc(self):
+            split = tt.split('\n\n')
+            if split:
+                return split[0].strip()
+        return ''
 
 class SecsStreamFunction(metaclass=StructureDisplayingMeta):
     """
@@ -204,12 +211,3 @@ class SecsStreamFunction(metaclass=StructureDisplayingMeta):
             return SecsVar.get_format(cls._dataFormat)
 
         return "Header only"
-
-    @classmethod
-    def get_title(cls) -> str:
-        import inspect
-        if tt := inspect.getdoc(cls):
-            split = tt.split('\n\n')
-            if split:
-                return split[0].strip()
-        return ''
