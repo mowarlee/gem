@@ -127,13 +127,14 @@ class EventProducer:
         :type data: dict
         """
         for target in self._targets:
-            generic_handler = getattr(target, "_on_event", None)
-            if callable(generic_handler):
-                generic_handler(event, data)
 
             specific_handler = getattr(target, "_on_event_" + event, None)
             if callable(specific_handler):
                 specific_handler(data)
+            else:
+                generic_handler = getattr(target, "_on_event", None)
+                if callable(generic_handler):
+                    generic_handler(event, data)
 
         if event in self._events:
             self._events[event](data)

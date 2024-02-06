@@ -3,7 +3,8 @@ from .handler import GemHandler
 from collections import OrderedDict
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from gem.secs.functionbase import SecsStreamFunction
+    from lib.gem.secs.functionbase import SecsStreamFunction
+    from lib.gem.hsms import HsmsPacket
 
 
 class GemHostHandler(GemHandler):
@@ -199,7 +200,7 @@ class GemHostHandler(GemHandler):
 
         return self.stream_function(5, 2)(result)
 
-    def _on_s06f11(self, handler : GemHandler, packet : 'SecsStreamFunction'):
+    def _on_s06f11(self, handler : GemHandler, packet : 'HsmsPacket'):
         """
         Callback handler for Stream 6, Function 11, Establish Communication Request.
 
@@ -209,23 +210,30 @@ class GemHostHandler(GemHandler):
         :type packet: :class:`secsgem.hsms.packets.HsmsPacket`
         """
         del handler  # unused parameters
+        self._fire_events(packet)
+
+        return self.stream_function(6, 12)(0)
+
+    def _fire_events(self, packet : 'HsmsPacket') -> None:
 
         message = self.secs_decode(packet)
 
         for report in message.RPT:
-            report_dvs = self.reportSubscriptions[report.RPTID.get()]
-            report_values = report.V.get()
+            try:
+                report_dvs = self.reportSubscriptions[report.RPTID.get()]
+            
+                report_values = report.V.get()
 
-            values = []
+                values = []
 
-            for i, s in enumerate(report_dvs):
-                values.append({"dvid": s, "value": report_values[i], "name": self.get_dvid_name(s)})
+                for i, s in enumerate(report_dvs):
+                    values.append({"dvid": s, "value": report_values[i], "name": self.get_dvid_name(s)})
 
-            data = {"ceid": message.CEID, "rptid": report.RPTID, "values": values,
-                    "name": self.get_ceid_name(message.CEID), "handler": self.connection, 'peer': self}
-            self.events.fire("collection_event_received", data)
-
-        return self.stream_function(6, 12)(0)
+                data = {"ceid": message.CEID, "rptid": report.RPTID, "values": values,
+                        "name": self.get_ceid_name(message.CEID), "handler": self.connection, 'peer': self}
+                self.events.fire("collection_event_received", data)
+            except KeyError as ke:
+                self.logger.warning(f"{report.RPTID.get()} {list(self.reportSubscriptions.keys())}"})
 
     def _on_terminal_received(self, handler : GemHandler, TID, TEXT):
         del handler, TID, TEXT  # unused variables
